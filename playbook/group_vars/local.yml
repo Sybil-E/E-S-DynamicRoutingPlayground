@@ -1,0 +1,54 @@
+---
+vlan_ifname: eth1
+
+bgp_router_hostname: bgpd
+bgp_router_password: password
+
+ospf_router_hostname: ospfd
+ospf_router_password: password
+
+isp:
+  as_number: 65001
+  assigned_network: "172.17.0.0/16"
+  bgprt:
+    - bgp_router_id: "192.168.100.2"
+      ebgp_ip: "192.168.100.2/24"
+      upstream_dummy_ip: "172.17.0.1/24"
+
+own:
+  as_number: 65002
+  assigned_network: "172.16.0.0/16"
+  bgprt:
+    - bgp_router_id: "192.168.100.1"
+      ospf_router_id: "172.16.0.1"
+      ebgp_ip: "192.168.100.1/24"
+      ospf_ip: "172.16.255.1/24"
+
+igp:
+  ospfrt:
+    - ospf_router_id: "172.16.0.2"
+      ospf_ip: "172.16.255.2/24"
+  user:
+    default_gw_ip:
+      - "172.16.1.254/24"
+      - "172.16.2.254/24"
+
+vlanid:
+  ebgp: 101
+  ospf: 102
+  user:
+    - 111
+    - 112
+  upstream_dummy: 113
+      
+dhcp:
+  - subnet: "172.16.1.0"
+    netmask: "255.255.255.0"
+    range: "172.16.1.1 172.16.1.253"
+    default_gw_ip: "172.16.1.254"
+    broadcast_address: "172.16.1.255"
+  - subnet: "172.16.2.0"
+    netmask: "255.255.255.0"
+    range: "172.16.2.1 172.16.2.253"
+    default_gw_ip: "172.16.2.254"
+    broadcast_address: "172.16.2.255"

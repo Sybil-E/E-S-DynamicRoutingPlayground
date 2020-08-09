@@ -1,0 +1,15 @@
+---
+- name: bgpd.conf provided
+  template:
+    src: bgpd.conf.j2
+    dest: /etc/quagga/bgpd.conf
+    owner: quagga
+    group: quagga
+    mode: 0640
+  notify: restart bgpd
+
+- name: bgpd enabled and started
+  systemd:
+    name: bgpd
+    state: started
+    enabled: yes

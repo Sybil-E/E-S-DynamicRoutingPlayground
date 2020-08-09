@@ -1,0 +1,14 @@
+hostname {{ ospf_router_hostname }}
+password {{ ospf_router_password }}
+enable password {{ ospf_router_password }}
+!
+router ospf
+  ospf router-id {{ ospf_router_self_id }}
+  network {{ ospf_router_assigned_network }} area 0
+{% if "own-bgprt" in ospf_router_host_name %}
+  default-information originate always
+{% endif %}
+!
+log file ospfd.log
+!
+log stdout

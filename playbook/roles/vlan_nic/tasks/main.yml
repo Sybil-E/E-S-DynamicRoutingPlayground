@@ -1,0 +1,27 @@
+---
+- name: vlan nic exist check
+  shell: "ip a | grep {{ vlan_nic_ifname }}.{{ vlan_nic_vlanid }}"
+  register: vlan_nic_exist
+  ignore_errors: yes
+  changed_when: false
+  check_mode: no
+
+- name: vlan nic provided
+  command: "ip link add link {{ vlan_nic_ifname }} name {{ vlan_nic_ifname }}.{{ vlan_nic_vlanid }} type vlan id {{ vlan_nic_vlanid }}"
+  when: vlan_nic_exist.rc != 0
+
+- name: vlan ip exist check
+  shell: "ip a | grep {{ vlan_nic_ip4}}"
+  register: vlan_ip_exist
+  ignore_errors: yes
+  changed_when: false
+  check_mode: no
+
+- name: vlan ip provided
+  command: "ip a add dev {{ vlan_nic_ifname }}.{{ vlan_nic_vlanid }} {{ vlan_nic_ip4 }}"
+  when: vlan_ip_exist.rc != 0
+
+- name: vlan nic up
+  command: "ip link set {{ vlan_nic_ifname }}.{{ vlan_nic_vlanid }} up"
+  changed_when: false
+  check_mode: no

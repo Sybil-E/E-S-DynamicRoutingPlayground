@@ -1,0 +1,5 @@
+---
+- name: restart ospfd
+  systemd:
+    state: restarted
+    name: ospfd

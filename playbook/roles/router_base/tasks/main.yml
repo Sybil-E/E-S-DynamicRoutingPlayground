@@ -1,0 +1,22 @@
+---
+- name: selinux disabled
+  selinux:
+    state: disabled
+
+- name: ipv4.ip_forward enabled
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    sysctl_set: yes
+
+- name: for router_base package installed
+  yum:
+    name: 
+      - quagga-0.99.22.4-5.el7_4
+      - telnet-0.17-65.el7_8
+      - tcpdump-4.9.2-4.el7_7.1
+      - nm-connection-editor-1.8.6-2.el7
+      - libsemanage-python-2.5-14.el7
+      - policycoreutils-python-2.5-34.el7
+      - libnm-gtk-devel-1.8.6-2.el7
+    state: present

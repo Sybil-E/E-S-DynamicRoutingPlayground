@@ -1,0 +1,9 @@
+{% for config in dhcp_server_subnet_configs %}
+subnet {{ config.subnet }} netmask {{ config.netmask }} {
+  range {{ config.range }};
+  option routers {{ config.default_gw_ip }};
+  option broadcast-address {{ config.broadcast_address }};
+  default-lease-time 600;
+  max-lease-time 7200;
+}
+{% endfor %}

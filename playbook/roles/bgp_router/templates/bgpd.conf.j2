@@ -1,0 +1,22 @@
+hostname {{ bgp_router_hostname }}
+password {{ bgp_router_password }}
+enable password {{ bgp_router_password }}
+!
+router bgp {{ bgp_router_self_as_number }}
+  bgp router-id {{ bgp_router_self_id }}
+!
+  neighbor {{ bgp_router_opponent_id }} remote-as {{ bgp_router_opponent_as_number }}
+  neighbor {{ bgp_router_opponent_id }} route-map nexthop out
+  neighbor {{ bgp_router_opponent_id }} next-hop-self
+!
+  network {{ bgp_router_assigned_network }}
+!
+  access-list all permit any
+!
+route-map nexthop permit 10
+  match ip address all
+  set ip next-hop {{ bgp_router_self_id }}
+!
+log file bgpd.log
+!
+log stdout

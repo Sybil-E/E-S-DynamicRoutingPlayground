@@ -1,0 +1,21 @@
+---
+- name: for dhcp_server package installed
+  yum:
+    name:
+      - dhcp-4.2.5-79.el7.centos
+    state: present
+
+- name: dhcpd.conf provided
+  template:
+    src: dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
+    owner: root
+    group: root
+    mode: 0640
+  notify: restart dhcpd
+
+- name: dhcpd enabled and started
+  systemd:
+    name: dhcpd
+    state: started
+    enabled: yes

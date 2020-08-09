@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: yes
+  roles:
+    - role: router_base
+    - role: vlan_nic
+      vlan_nic_vlanid: "{{ vlanid.user[0] }}"
+      vlan_nic_ip4: "{{ igp.user.default_gw_ip[0] }}"
+    - role: vlan_nic
+      vlan_nic_vlanid: "{{ vlanid.user[1] }}"
+      vlan_nic_ip4: "{{ igp.user.default_gw_ip[1] }}"
+    - role: vlan_nic
+      vlan_nic_vlanid: "{{ vlanid.ospf }}"
+      vlan_nic_ip4: "{{ igp.ospfrt[0].ospf_ip }}"
+    - role: ospf_router
+    - role: dhcp_server
+  vars:
+    ospf_router_self_id: "{{ igp.ospfrt[0].ospf_router_id }}"
+    ospf_router_assigned_network: "{{ own.assigned_network }}"
+    ospf_router_loopback_interface_ip4: "{{ igp.ospfrt[0].ospf_router_id }}"
+    ospf_router_host_name: "igp-rt01"
+    vlan_nic_ifname: "{{ vlan_ifname }}"
+    dhcp_server_subnet_configs: "{{ dhcp }}"

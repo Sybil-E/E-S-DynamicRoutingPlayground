@@ -1,0 +1,26 @@
+---
+- name: loopback ip exist check
+  shell: "ip a | grep {{ ospf_router_loopback_interface_ip4 }}"
+  register: loopback_ip_exist
+  ignore_errors: yes
+  changed_when: false
+  check_mode: no
+
+- name: loopback ip provided
+  command: "ip a add dev lo {{ ospf_router_loopback_interface_ip4 }}/32"
+  when: loopback_ip_exist.rc != 0
+
+- name: ospfd.conf provided
+  template:
+    src: ospfd.conf.j2
+    dest: /etc/quagga/ospfd.conf
+    owner: quagga
+    group: quagga
+    mode: 0640
+  notify: restart ospfd
+
+- name: ospfd enabled and started
+  systemd:
+    name: ospfd
+    state: started
+    enabled: yes

@@ -1,0 +1,8 @@
+---
+- hosts: local
+  become: yes
+  roles:
+    - role: user_vm
+      vlan_nic_vlanid: "{{ vlanid.user[1] }}"
+  vars:
+    vlan_nic_ifname: "{{ vlan_ifname }}"

@@ -1,0 +1,19 @@
+---
+- hosts: all
+  become: yes
+  roles:
+    - role: router_base
+    - role: vlan_nic
+      vlan_nic_vlanid: "{{ vlanid.ebgp }}"
+      vlan_nic_ip4: "{{ isp.bgprt[0].ebgp_ip }}"
+    - role: vlan_nic
+      vlan_nic_vlanid: "{{ vlanid.upstream_dummy }}"
+      vlan_nic_ip4: "{{ isp.bgprt[0].upstream_dummy_ip }}"
+    - role: bgp_router
+  vars:
+    bgp_router_self_as_number: "{{ isp.as_number }}"
+    bgp_router_opponent_as_number: "{{ own.as_number }}"
+    bgp_router_self_id: "{{ isp.bgprt[0].bgp_router_id }}"
+    bgp_router_opponent_id: "{{ own.bgprt[0].bgp_router_id }}"
+    bgp_router_assigned_network: "{{ isp.assigned_network }}"
+    vlan_nic_ifname: "{{ vlan_ifname }}"
